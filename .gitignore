@@ -1,0 +1,14 @@
+build/
+dist/
+.cache/
+.DS_Store
+node_modules/
+.test-data/
+.test-results/
+*.log
+*.dmg
+*.zip
+.env
+.env.*
+state.json
+daily.json

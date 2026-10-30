@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>副屏</title><style>
+html,body{margin:0;width:100%;height:100%;background:#111214;overflow:hidden}iframe{display:block;width:100%;height:100dvh;border:0}
+</style></head><body><iframe id="preview" title="副屏工作台" allow="fullscreen"></iframe><script>
+const themes={graphite:'dir-1.html',deepsea:'dir-2.html',amber:'dir-3.html',mist:'dir-4.html',blueprint:'dir-5.html',neon:'dir-6.html'};
+const frame=document.getElementById('preview'),params=new URLSearchParams(location.search);
+let currentTheme='graphite',viewMode='daily';
+try{currentTheme=localStorage.getItem('focus-preview-theme')||currentTheme;viewMode=localStorage.getItem('focus-preview-view-mode')||viewMode}catch{}
+if(themes[params.get('theme')])currentTheme=params.get('theme');
+if(['work','daily'].includes(params.get('mode')))viewMode=params.get('mode');
+if(!themes[currentTheme])currentTheme='graphite';if(!['work','daily'].includes(viewMode))viewMode='daily';
+window.addEventListener('message',event=>{
+ if(event.source!==frame.contentWindow)return;
+ if(event.data?.type==='focus-preview-mode'&&['work','daily'].includes(event.data.mode))viewMode=event.data.mode;
+ else if(event.data?.type==='focus-preview-theme'&&themes[event.data.theme])currentTheme=event.data.theme;
+ else return;
+ try{localStorage.setItem('focus-preview-view-mode',viewMode);localStorage.setItem('focus-preview-theme',currentTheme);const url=new URL(location.href);url.searchParams.set('mode',viewMode);url.searchParams.set('theme',currentTheme);history.replaceState(null,'',url)}catch{}
+});
+if(location.protocol==='file:'&&params.get('offline')!=='1'){
+ const live=new URL('http://127.0.0.1:18767/');live.searchParams.set('mode',viewMode);live.searchParams.set('theme',currentTheme);location.replace(live.href);
+}else frame.src=themes[currentTheme]+'?theme='+encodeURIComponent(currentTheme)+'&mode='+viewMode;
+</script></body></html>

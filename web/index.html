@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="dashboard-token" content="__SESSION_TOKEN__">
+  <title>Focus Display · 此刻，专注</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="dashboard">
+    <header class="topbar">
+      <h1><span class="brand-mark" aria-hidden="true">f<span>·</span></span> FOCUS DISPLAY</h1>
+      <span class="top-caption">留一点空间，给重要的事。</span>
+      <div class="top-actions">
+        <button id="settings-open" class="icon-button" aria-label="打开设置" title="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6M16 14v6"/></svg></button>
+        <button id="fullscreen" class="icon-button" aria-label="切换全屏" title="全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></svg></button>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <section class="focus-column" aria-label="时间与专注">
+        <div class="clock-panel">
+          <div class="eyebrow"><span id="greeting">此刻，专注</span><span id="timezone">本地时间</span></div>
+          <div class="clock-line"><time id="clock">--:--</time><span id="seconds">--</span></div>
+          <div class="date-line"><span id="date">正在读取日期</span><span class="clock-note">每一刻，都算数。</span></div>
+        </div>
+        <section class="panel timer-panel" aria-labelledby="timer-heading">
+          <div class="section-heading"><h2 id="timer-heading"><span class="tiny-dot" aria-hidden="true"></span> 专注计时</h2>
+            <div class="mode-tabs" aria-label="计时模式">
+              <button data-mode="focus" aria-pressed="true">专注</button><button data-mode="short" aria-pressed="false">短休</button><button data-mode="long" aria-pressed="false">长休</button>
+            </div>
+          </div>
+          <div class="timer-main">
+            <div><div id="timer-digits" class="timer-digits" role="timer" aria-label="番茄钟剩余时间">25:00</div><div id="timer-hint" class="small muted">准备好，开始一段专注</div></div>
+            <div class="timer-actions"><button id="timer-toggle" class="primary">开始专注</button><button id="timer-reset" class="icon-button reset" aria-label="重置当前计时" title="重置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button></div>
+          </div>
+          <div class="timer-track"><progress id="timer-progress" max="1" value="0" aria-label="当前阶段进度"></progress></div>
+          <div class="timer-bottom"><span id="completed">今日完成 0 轮</span><span id="cycle-dots" aria-label="四轮专注进度">○ ○ ○ ○</span><span>一次，只做一件事</span></div>
+        </section>
+      </section>
+
+      <div class="plan-column">
+        <section class="panel tasks-panel" aria-labelledby="tasks-heading">
+          <div class="section-heading"><h2 id="tasks-heading">今日重点 <span class="section-en">/ TOP 3</span></h2><span id="task-count" class="small muted">0 / 3</span></div>
+          <div id="tasks">
+            <div class="task-row"><input type="checkbox" id="done-0" aria-label="完成第一个重点任务"><label class="task-index" for="task-0">01</label><input type="text" id="task-0" maxlength="120" placeholder="写下最重要的一件事" aria-label="第一个重点任务" autocomplete="off"></div>
+            <div class="task-row"><input type="checkbox" id="done-1" aria-label="完成第二个重点任务"><label class="task-index" for="task-1">02</label><input type="text" id="task-1" maxlength="120" placeholder="然后，是这件事" aria-label="第二个重点任务" autocomplete="off"></div>
+            <div class="task-row"><input type="checkbox" id="done-2" aria-label="完成第三个重点任务"><label class="task-index" for="task-2">03</label><input type="text" id="task-2" maxlength="120" placeholder="为今天留一个小目标" aria-label="第三个重点任务" autocomplete="off"></div>
+          </div>
+        </section>
+        <section class="panel meeting-panel" aria-labelledby="meeting-heading">
+          <div class="section-heading"><h2 id="meeting-heading">下一场日程 <span class="section-en">/ UP NEXT</span></h2><button id="calendar-refresh" class="text-button" aria-label="刷新日历">刷新</button></div>
+          <div class="meeting-content"><div class="calendar-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4m8-4v4M4 11h16m-11 4h2m2 0h2"/></svg></div>
+            <div class="meeting-copy"><div id="meeting-time" class="meeting-time">让日程，恰好在视线里</div><h3 id="meeting-title">连接 macOS 日历</h3><div id="meeting-detail" class="small muted">只在本机读取，不上传日程。</div></div>
+            <span id="meeting-badge" class="badge" hidden></span>
+          </div>
+          <button id="calendar-connect" class="calendar-connect">连接本机日历 <span aria-hidden="true">↗</span></button>
+        </section>
+      </div>
+    </div>
+
+    <section class="metrics" aria-label="实时系统监控">
+      <article class="metric"><div class="metric-top"><h2>CPU <span class="metric-sub">处理器</span></h2><span id="cpu-detail" class="small muted">采样中</span></div><div class="metric-main"><strong id="cpu-value">—<small>%</small></strong><svg id="cpu-chart" class="sparkline" viewBox="0 0 180 36" preserveAspectRatio="none" role="img" aria-label="最近一分钟 CPU 使用率"><polyline points=""/></svg></div></article>
+      <article class="metric"><div class="metric-top"><h2>MEMORY <span class="metric-sub">内存</span></h2><span id="memory-detail" class="small muted">正在采样</span></div><div class="metric-main"><strong id="memory-value">—<small>%</small></strong><progress id="memory-bar" max="100" value="0" aria-label="内存估算使用率"></progress></div></article>
+      <article class="metric"><div class="metric-top"><h2>DISK <span class="metric-sub">数据卷</span></h2><span id="disk-detail" class="small muted">正在采样</span></div><div class="metric-main"><strong id="disk-value">—<small>%</small></strong><progress id="disk-bar" max="100" value="0" aria-label="磁盘使用率"></progress></div></article>
+    </section>
+    <footer><span class="connection"><span id="connection-dot" class="tiny-dot" aria-hidden="true"></span><span id="connection-status" role="status">正在连接本机服务</span></span><span id="save-status" role="status">数据仅保存在这台 Mac</span><span id="sample-status">每 2 秒更新</span></footer>
+  </main>
+  <div id="notice" role="status" aria-live="polite" hidden></div>
+
+  <dialog id="settings" aria-labelledby="settings-title">
+    <form id="settings-form">
+      <div class="section-heading"><h2 id="settings-title">让它适合你的节奏</h2><button type="button" id="settings-close" class="icon-button" aria-label="关闭设置">×</button></div>
+      <p class="muted small">新时长在下一轮或重置后生效。当前计时会保留。</p>
+      <div class="duration-fields"><label>专注 / 分钟<input type="number" id="pref-focus" min="1" max="180" required></label><label>短休 / 分钟<input type="number" id="pref-short" min="1" max="60" required></label><label>长休 / 分钟<input type="number" id="pref-long" min="1" max="120" required></label></div>
+      <label class="setting-check"><input type="checkbox" id="pref-calendar">启用本机日历</label>
+      <label class="setting-check"><input type="checkbox" id="pref-hide">隐藏会议标题与日历名称</label>
+      <label class="setting-check"><input type="checkbox" id="pref-fullscreen">下次打开原生窗口时进入全屏</label>
+      <label class="calendar-select-label" for="pref-calendars">显示哪些日历（可多选）</label>
+      <select id="pref-calendars" multiple size="3" aria-describedby="calendar-help"></select>
+      <p id="calendar-help" class="muted small">不选择表示全部。连接并授权后显示日历列表；仅显示未来 7 天内未结束的非全天日程。</p>
+      <p class="muted small">macOS 的读取日历授权名为“完全访问”。本应用只查询日程，不修改日历。可随时在系统设置撤销。</p>
+      <p id="settings-error" role="alert"></p>
+      <button class="primary settings-save" type="submit">保存设置</button>
+    </form>
+  </dialog>
+</body>
+</html>
